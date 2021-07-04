@@ -142,7 +142,17 @@ export const getPage = async (
   await window.webContents.executeJavaScript("delete window.puppeteer");
   const page = pages[index];
   if (!page) {
-    throw new Error("Unable to find puppeteer Page from BrowserWindow. Please report this.");
+    const error = new (class extends Error { debugInformation: any })("Unable to find puppeteer Page from BrowserWindow. Please report this.")
+    error.debugInformation = {
+      browser,
+      window,
+      guid,
+      guids,
+      index,
+      pages,
+      page,
+    }
+    throw error;
   }
   return page;
 };
